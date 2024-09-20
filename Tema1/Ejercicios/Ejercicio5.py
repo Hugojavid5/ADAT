@@ -1,7 +1,3 @@
-'''
-Modifica el programa anterior de forma que cada una de las funcionalidades del programa se
-ejecute mediante una función.
-'''
 ##Declaracion funciones
 def sumatorio(numeros):
     return sum(numeros)

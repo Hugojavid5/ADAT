@@ -1,5 +1,3 @@
-##Modifica el programa anterior, de manera que al terminar de guardar los números en la lista
-##se impriman la lista, el sumatorio y la media de todos los número de dicha lista.
 numeros = []
 for i in range(10):
     numero = int(input(f"Ingrese el numero {i+1}: "))
