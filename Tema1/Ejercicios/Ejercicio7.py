@@ -71,7 +71,7 @@ class Persona:
         if sexo in (self.HOMBRE, self.MUJER):
             self.__sexo = sexo
         else:
-            raise ValueError("Sexo inválido")
+            raise ValueError("Sexo no valido")
 
     def set_peso(self, peso):
         self.__peso = peso
