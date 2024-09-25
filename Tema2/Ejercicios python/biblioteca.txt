@@ -1,0 +1,2 @@
+Libro(nombre='Ingles', autor='Java', precio=30.0, precioDec=25.0, paginas=300)
+Libro(nombre='mate', autor='educa', precio=20.0, precioDec=12.0, paginas=300)
