@@ -1,0 +1,14 @@
+4 Cuáles de las siguientes afirmaciones sobre SAX y DOM son correctas:
+ a-Los procesadores SAX y DOM son independientes del lenguaje de programación y existen
+versiones particulares para Java, VisualBasíc, C, etc.
+b-Mediante SAX se carga todo el fichero
+XML en memoria y se lee de forma secuencial produciendo una secuencia de eventos.
+c-Mediante DOM se almacena toda la estructura del documento XML en memoria en forma de
+árbol con nodos padre, nodos hijo y nodos finales.
+d-SAX es más complejo de programar que DOM.
+e-El tipo de procesamiento de SAX necesita más recursos de memoria y tiempo sobre todo si
+los ficheros XML a procesar son bastante grandes y complejos.
+f-El tipo de procesamiento de DOM impide tener una visión global del documento por el que
+navegar.
+
+Las respuestas correctas son la a y la c.

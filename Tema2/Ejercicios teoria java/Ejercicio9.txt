@@ -1,0 +1,8 @@
+9 Señala la respuesta correcta sobre las excepciones:
+a-Una sentencia try no puede estar dentro de un bloque de otra sentencia try.
+b-Un bloque try va seguido por un único bloque catch.
+c-Cada bloque catch especifica el tipo de excepción que puede atrapar y contiene un manejador
+de excepciones.
+d-El bloque finally se ejecuta si no ocurre la excepción.
+
+La respuesta correcta es la c
