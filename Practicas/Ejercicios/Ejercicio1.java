@@ -64,6 +64,11 @@ private Scanner scanner = new Scanner(System.in);
     {
 
     }
+
+    public void listarDirectorio()
+    {
+        
+    }
     public static void main(String[] args) {
         Ejercicio1 ej1 = new Ejercicio1();
         ej1.mostrar_menu();
