@@ -68,9 +68,9 @@ public class Ejercicio2 {
             IvParameterSpec iv = generateIv();
 
             // Ficheros de entrada y salida
-            File inputFile = new File("prueba.bin"); // Fichero binario original
-            File encryptedFile = new File("prueba_encrypted.bin"); // Fichero cifrado
-            File decryptedFile = new File("prueba_decrypted.bin"); // Fichero descifrado
+            File inputFile = new File("ficheroLeer.txt"); // Fichero binario original
+            File encryptedFile = new File("ficheroCifrado.bin"); // Fichero cifrado
+            File decryptedFile = new File("ficheroDescifrado.txt"); // Fichero descifrado
 
             // Cifrar el fichero
             encryptFile("AES/CBC/PKCS5Padding", key, iv, inputFile, encryptedFile);
