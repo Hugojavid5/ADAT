@@ -31,26 +31,31 @@ private Scanner scanner = new Scanner(System.in);
             if(opcion==1)
             {
                 System.out.println("Crea un directorio");
+                crearDirectorio(null, null);
             }
             else 
                 if(opcion ==2)
                 {
                     System.out.println("Listar un directorio");
+                    listarDirectorio();
                 }
                 else 
                     if(opcion==3)
                     {
                         System.out.println("Copiar un archivo");
+                        copiarArchivo();
                     }
                     else
                         if(opcion==4)
                         {
                             System.out.println("Mover un archivo");
+                            moverArchivo();
                         }
                         else 
                             if(opcion==5)
                             {
                                 System.out.println("Eliminar un archivo/directorio");
+                                eliminarArchivoDirectorio();
                             }
                             else 
                                 if(opcion==6)
@@ -69,6 +74,23 @@ private Scanner scanner = new Scanner(System.in);
     {
         
     }
+
+    public void copiarArchivo()
+    {
+        
+    }
+
+    public void moverArchivo()
+    {
+        
+    }
+
+    public void eliminarArchivoDirectorio()
+    {
+
+    }
+
+
     public static void main(String[] args) {
         Ejercicio1 ej1 = new Ejercicio1();
         ej1.mostrar_menu();
