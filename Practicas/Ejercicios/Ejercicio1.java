@@ -1,5 +1,3 @@
-package Practicas.Ejercicios;
-
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
