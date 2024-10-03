@@ -33,7 +33,7 @@ private Scanner scanner = new Scanner(System.in);
                 System.out.println("Crea un directorio");
                 crearDirectorio(null, null);
             }
-            else 
+            else
                 if(opcion ==2)
                 {
                     System.out.println("Listar un directorio");
