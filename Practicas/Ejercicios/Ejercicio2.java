@@ -1,166 +1,346 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Scanner;
+
 public class Ejercicio2 {
-    private Scanner scanner = new Scanner(System.in);
-    private final String athleteEventsFile = "athlete_events.csv"; // Ruta del archivo CSV de eventos de atletas
-    private final String olympicsFile = "olimpiadas.csv"; // Ruta del archivo CSV de olimpiadas
-    public void mostrar_menu()
-    {
-        int opcion=0;
-        while(opcion!=5)
-        {
-            System.out.println("1 - Generar fichero CSV de olimpiadas");
-            System.out.println("2 - Buscar deportista");
-            System.out.println("3 - Buscar deportistas por deporte y olimpiada");
-            System.out.println("4 - Añadir deportista");
-            System.out.println("5 - Salir"); 
-            opcion = scanner.nextInt(); 
-        }
-        while (opcion<1 || opcion>5) 
-        {
-            System.out.println("Opcion no valida");
-            System.out.println("Elige una opcion(1-5):");
-            opcion = scanner.nextInt();
-        }
-        if(opcion==5)
-        {
-            System.out.println("Saliendo del programa");
-        }
-        if (opcion==1) 
-        {
-            generarFicheroCSV();
-        }
-        if (opcion==2) 
-        {
-            buscarDeportista();
-        }
-        if(opcion==3)
-        {
-            buscarDeportistasPorDeporte();
-        }
-        if(opcion==4)
-        {
-            anadirDeportista();
-        }
-    }
-
-    private void generarFicheroCSV() {
-        try (CSVReader reader = new CSVReader(new FileReader(athleteEventsFile));
-             CSVWriter writer = new CSVWriter(new FileWriter(olympicsFile))) {
-            String[] nextLine;
-            List<String[]> data = new ArrayList<>();
-
-            // Leer el archivo de atletas y generar el archivo de olimpiadas
-            while ((nextLine = reader.readNext()) != null) {
-                String games = nextLine[0]; // Cambia esto según la estructura de tu CSV
-                String year = nextLine[1];
-                String season = nextLine[2];
-                String city = nextLine[3];
-                String[] record = {games, year, season, city};
-                data.add(record);
-            }
-            writer.writeAll(data);
-            System.out.println("Fichero CSV de olimpiadas generado: " + olympicsFile);
-        } catch (IOException e) {
-            System.out.println("Error al generar el fichero CSV: " + e.getMessage());
-        }
-    }
-
-    private void buscarDeportista() {
-        System.out.println("Introduce el nombre del deportista a buscar:");
-        scanner.nextLine(); // Limpiar el buffer
-        String nombreBuscado = scanner.nextLine();
-
-        try (CSVReader reader = new CSVReader(new FileReader(athleteEventsFile))) {
-            String[] nextLine;
-            boolean encontrado = false;
-
-            while ((nextLine = reader.readNext()) != null) {
-                String nombre = nextLine[0]; // Cambia esto según la estructura de tu CSV
-                if (nombre.contains(nombreBuscado)) {
-                    System.out.println("Deportista encontrado: " + nombre);
-                    // Aquí podrías imprimir más datos si fuera necesario
-                    encontrado = true;
+	
+	private static void generarFicheroCSV() {
+        try (BufferedReader br = new BufferedReader(new FileReader("athlete_events.csv"));
+             BufferedWriter bw = new BufferedWriter(new FileWriter("olimpiadas.csv"))) {
+            String linea;
+            String leido=br.readLine();
+            if (leido!=null) {
+            	int juegos=-1;
+            	int anio=-1;
+            	int temporadda=-1;
+            	int city=-1;
+            	String[] values=leido.split(",");
+            	for(int i=0;i<values.length;i++) {
+            		String valor=values[i];
+            		if(valor.equals("\"Games\"")) {
+            			juegos=i;
+            		}
+            		if(valor.equals("\"Year\"")) {
+            			anio=i;
+            		}
+            		if(valor.equals("\"Season\"")) {
+            			temporadda=i;
+            		}
+            		if(valor.equals("\"City\"")) {
+            			city=i;
+            		}
+            	}
+                bw.write("\"Games\",\"Year\",\"Season\",\"City\"\n");
+                while ((linea = br.readLine()) != null) {
+                	values=linea.split(",");
+                    String games=values[juegos];
+                    String year=values[anio];
+                    String season=values[temporadda];
+                    String citi=values[city];
+                    bw.write(games+","+year+","+season+","+citi+"\n");
                 }
-            }
-            if (!encontrado) {
-                System.out.println("No se encontraron deportistas con ese nombre.");
+                System.out.println("Fichero generado");
             }
         } catch (IOException e) {
-            System.out.println("Error al buscar el deportista: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
-    private void buscarDeportistasPorDeporte() {
-        System.out.println("Introduce el deporte:");
-        scanner.nextLine(); // Limpiar el buffer
-        String deporte = scanner.nextLine();
-
-        System.out.println("Introduce el año olímpico:");
-        int year = scanner.nextInt();
-
-        System.out.println("Introduce la temporada (Summer/Winter):");
-        scanner.nextLine(); // Limpiar el buffer
-        String season = scanner.nextLine();
-
-        try (CSVReader reader = new CSVReader(new FileReader(athleteEventsFile))) {
-            String[] nextLine;
-            boolean encontrado = false;
-
-            while ((nextLine = reader.readNext()) != null) {
-                String sport = nextLine[2]; // Cambia esto según la estructura de tu CSV
-                String yearOlympic = nextLine[1];
-                String seasonOlympic = nextLine[3];
-
-                if (sport.equalsIgnoreCase(deporte) && Integer.parseInt(yearOlympic) == year && seasonOlympic.equalsIgnoreCase(season)) {
-                    System.out.println("Deportista: " + nextLine[0] + ", Evento: " + nextLine[4] + ", Medalla: " + nextLine[5]);
-                    encontrado = true;
-                }
+	private static void mostrarDeportistas(String cadenaABuscar) {
+		try (BufferedReader br = new BufferedReader(new FileReader("athlete_events.csv"))) {
+			String linea;
+            String leido = br.readLine();
+            if (leido!=null) {
+            	int id=-1;
+            	int nombre=-1;
+            	int sexo=-1;
+            	int edad=-1;
+            	int altura=-1;
+            	int ancho=-1;
+            	int participacion=-1;
+            	String[] values=leido.split(",");
+            	for(int i=0;i<values.length;i++) {
+            		String valor=values[i];
+            		if(valor.equals("\"ID\"")) {
+            			id=i;
+            		}
+            		if(valor.equals("\"Name\"")) {
+            			nombre=i;
+            		}
+            		if(valor.equals("\"Sex\"")) {
+            			sexo=i;
+            		}
+            		if(valor.equals("\"Age\"")) {
+            			edad=i;
+            		}
+            		if(valor.equals("\"Height\"")) {
+						altura=i;
+            		}
+            		if(valor.equals("\"Weight\"")) {
+            			ancho=i;
+            		}
+            		if(valor.equals("\"Games\"")) {
+            			participacion=i;
+            		}
+            	}
+            	int i=0;
+            	while ((linea=br.readLine()) != null) {
+            		values=linea.split(",");
+            		String nombres=values[nombre];
+            		if(nombres.contains(cadenaABuscar)) {
+	            		 i++;
+	                     String ids=values[id];
+	                     String sex=values[sexo];
+	                     String eda=values[edad];
+	                     String alt=values[altura];
+	                     String peso=values[ancho];
+	                     String particip=values[participacion];
+	                     System.out.println("ID: "+ids+", Nombre: "+nombres+
+	                    		 ", Sexo: "+sex+", Edad: "+eda+", Altura: "+
+	                    		 alt+", Peso: "+peso+", Participacion: "+
+	                    		 particip);
+            		}
+                 }
+            	 if(i==0) {
+            		 System.out.println("No se ha encontrado a ningun "
+            		 		+ "deportista que contenga "+cadenaABuscar+" en "
+            		 				+ "el nombre");
+            	 }
+            	
             }
-
-            if (!encontrado) {
-                System.out.println("No se encontraron deportistas en ese deporte y año olímpico.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void buscarPorDeporteYAnio(String deporte,String anio,
+			int temporada) {
+		String temp="Winter";
+		if(temporada==1) {
+			temp="Summer";
+		}
+		try (BufferedReader br=new BufferedReader(new FileReader(
+				"Datos_Olimpiadas/athlete_events.csv"))) {
+			String linea;
+            String leido=br.readLine();
+            if (leido!=null) {
+            	int indiceSport=-1;
+            	int indiceYear=-1;
+            	int indiceSeason=-1;
+            	int indiceName=-1;
+            	int indiceEvent=-1;
+            	int indiceMedal=-1;
+            	int indiceGames=-1;
+            	int indiceCity=-1;
+            	String[] values = leido.split(",");
+            	for(int i=0;i<values.length;i++) {
+            		String valor=values[i];
+            		if(valor.equals("\"Sport\"")) {
+            			indiceSport=i;
+            		}
+            		if(valor.equals("\"Year\"")) {
+            			indiceYear=i;
+            		}
+            		if(valor.equals("\"Season\"")) {
+            			indiceSeason=i;
+            		}
+            		if(valor.equals("\"Name\"")) {
+            			indiceName=i;
+            		}
+            		if(valor.equals("\"Event\"")) {
+            			indiceEvent=i;
+            		}
+            		if(valor.equals("\"Medal\"")) {
+            			indiceMedal=i;
+            		}
+            		if(valor.equals("\"Games\"")) {
+            			indiceGames=i;
+            		}
+            		if(valor.equals("\"City\"")) {
+            			indiceCity=i;
+            		}
+            	}
+            	System.out.println(deporte);
+            	HashMap<String,ArrayList<String>> mapa=new HashMap<String,
+            			ArrayList<String>>();
+            	while ((linea=br.readLine())!=null) {
+            		values=linea.split(",");
+            		if(values[indiceSport].equals("\""+deporte+"\"")&&
+            				(values[indiceYear].equals(anio))&&
+            				(values[indiceSeason].equals("\""+temp+"\""))) {
+	                     String nombre=values[indiceName];
+	                     String evento=values[indiceEvent];
+	                     String medalla=values[indiceMedal];
+	                     String juegos=values[indiceGames];
+	                     String ciudad=values[indiceCity];
+	                     if(!mapa.containsKey(juegos+" "+ciudad)) {
+	                    	 mapa.put(juegos+" "+ciudad,
+	                    			 new ArrayList<String>());
+	                     }
+	                     mapa.get(juegos+" "+ciudad).add("Nombre: "+nombre+
+	                    		 ", Evento: "+evento+", Medalla: "+medalla);
+            		}
+            	}
+            	if(mapa.isEmpty()) {
+            		System.out.println("No hay nadie para el deporte que has "
+            				+ "elegido en la fecha y temporada que has "
+            				+ "elegido");
+            	}
+            	else {
+	            	for(Entry<String,ArrayList<String>>entrada:
+	            		mapa.entrySet()){
+	            		System.out.println("\t"+entrada.getKey());
+	            		for(String persona:entrada.getValue()) {
+	            			System.out.println("\t\t"+persona);
+	            		}
+	            	}
+            	}
             }
-        } catch (IOException e) {
-            System.out.println("Error al buscar deportistas por deporte: " + e.getMessage());
-        }
-    }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	private static void AniadeDeportista(String nombre,int sexo,int edad,
+			int altura,float peso, String equipo,String noc,String anio,
+			int temporada,String ciudad,String deporte,
+			String evento,int medalla) {
+		String id="";
+		try (BufferedReader br = new BufferedReader(new FileReader
+        		("Datos_Olimpiadas/athlete_events.csv"))) {
+			String linea;
+			String leido=br.readLine();
+            if (leido!=null) {
+            	int indiceID=-1;
+            	String[] values = leido.split(",");
+            	for(int i=0;i<values.length;i++) {
+            		String valor=values[i];
+            		if(valor.equals("\"ID\"")) {
+            			indiceID=i;
+            		}
+            	}
+            	 while ((linea = br.readLine()) != null) {
+            		 values=linea.split(",");
+            		 id=values[indiceID];
+            	 }
+            }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		id="\""+(Integer.parseInt(id.substring(1,id.length()-1))+1)+"\"";
+		String sex="M";
+		if(sexo==2) {
+			sex="F";
+		}
+		String temp="Summer";
+		if(temporada==2) {
+			temp="Winter";
+		}
+		String med="NA";
+		if(medalla==1) {
+			med="\"Gold\"";
+		}else {
+			if(medalla==2) {
+				med="\"Silver\"";
+			}
+			else {
+				if(medalla==3) {
+					med="\"Bronze\"";
+				}
+			}
+		}
+		try {
+			BufferedWriter bw=new BufferedWriter(new FileWriter
+					("Datos_Olimpiadas/athlete_events.csv",true));
+			bw.write(id+",\""+nombre+"\",\""+sex+"\","+edad+","+
+			altura+","+peso+",\""+equipo+"\",\""+noc+"\",\""+anio+" "+temp+
+			"\","+anio+",\""+temp+"\",\""+ciudad+"\",\""+deporte+"\",\""+
+			evento+"\","+med);
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	public static void main(String[] args) {
+		Scanner input=new Scanner(System.in);
+		System.out.println("1. Generar fichero csv de olimpiadas");
+		System.out.println("2. Buscar deportista");
+		System.out.println("3. Buscar deportistas por deporte y olimpiada");
+		System.out.println("4. Añadir deportista");
+		int opcion=input.nextInt();
+		input.nextLine();
+		switch (opcion) {
+		case 1:
+			generarFicheroCSV();
+			break;
+		case 2:
+			System.out.println("Dime a quien quieres buscar");
+			String persona=input.nextLine();
+			mostrarDeportistas(persona);
+			break;
+		case 3:
+			System.out.println("Dime el deprote");
+			String deporte=input.nextLine();
+			System.out.println("Dime el año");
+			String anio=input.nextLine();
+			int temporada=-1;
+			do {
+				System.out.println("Dime la temporada\n1 Summer\n2 Winter)");
+				temporada=input.nextInt();
+			}while(temporada!=1&&temporada!=2);
+			
+			buscarPorDeporteYAnio(deporte, anio, temporada);
+			break;
+		case 4:
+			System.out.println("Dime el nombre del atleta");
+			String nombre=input.nextLine();
+			int sexo=-1;
+			do {
+			System.out.println("Dime su sexo\n1 Hombre\n2 Mujer");
+			sexo=input.nextInt();
+			}while(sexo!=1&&sexo!=2);
+			System.out.println("Dime su edad");
+			int edad=input.nextInt();
+			System.out.println("Dime su altura");
+			int altura=input.nextInt();
+			System.out.println("Dime su peso");
+			float peso=input.nextFloat();
+			input.nextLine();
+			System.out.println("Dime su equipo");
+			String equipo=input.nextLine();
+			System.out.println("Dime su NOC");
+			String noc=input.nextLine();
+			System.out.println("Dime en que año fue");
+			anio=input.nextLine();
+			temporada=-1;
+			do {
+				System.out.println("Dime la temporada\n1 Summer\n2 Winter)");
+				temporada=input.nextInt();
+			}while(temporada!=1&&temporada!=2);
+			input.nextLine();
+			System.out.println("Dime en que ciudad fue");
+			String ciudad=input.nextLine();
+			System.out.println("Dime el deprote");
+			deporte=input.nextLine();
+			System.out.println("Dime el nombre del evento al que fue");
+			String evento=input.nextLine();
+			int medalla=-1;
+			do {
+				System.out.println("Dime que medalla consiguio");
+				System.out.println("1 oro\n2 plata\n3 bronce\n4 ninguna");
+				medalla=input.nextInt();
+			}while(medalla!=1&&medalla!=2&&medalla!=3&&medalla!=4);
+			AniadeDeportista(nombre,sexo,edad,altura,peso,equipo,noc,
+					anio,temporada,ciudad,deporte,evento,medalla);
+			break;
 
-    private void anadirDeportista() {
-        System.out.println("Introduce el nombre del deportista:");
-        scanner.nextLine(); // Limpiar el buffer
-        String nombre = scanner.nextLine();
-
-        // Aquí puedes pedir más información sobre el deportista
-        System.out.println("Introduce el deporte del deportista:");
-        String deporte = scanner.nextLine();
-
-        System.out.println("Introduce el evento del deportista:");
-        String evento = scanner.nextLine();
-
-        System.out.println("Introduce el año de participación:");
-        int year = scanner.nextInt();
-
-        System.out.println("Introduce la medalla (Gold/Silver/Bronze/None):");
-        scanner.nextLine(); // Limpiar el buffer
-        String medalla = scanner.nextLine();
-
-        // Añadir el nuevo deportista al archivo CSV
-        try (CSVWriter writer = new CSVWriter(new FileWriter(athleteEventsFile, true))) {
-            String[] nuevoDeportista = {nombre, String.valueOf(year), deporte, evento, medalla}; // Cambia esto según la estructura del CSV
-            writer.writeNext(nuevoDeportista);
-            System.out.println("Deportista añadido: " + nombre);
-        } catch (IOException e) {
-            System.out.println("Error al añadir deportista: " + e.getMessage());
-        }
-    }
-
-    public static void main(String[] args) {
-        Ejercicio2 ej2 = new Ejercicio2();
-        ej2.mostrar_menu();
-    }
+		default:
+			System.out.println("Opcion no valida");
+			break;
+		}
+	}
 }
