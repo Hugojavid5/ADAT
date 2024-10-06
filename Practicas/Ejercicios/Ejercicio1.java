@@ -22,47 +22,8 @@ public class Ejercicio1 {
             } else if (archivo.isFile()) {
                 System.out.println("Archivo "+archivo.getName());
             }
-<<<<<<< HEAD
 		}
 	}
-=======
-            if(opcion==1)
-            {
-                System.out.println("Crea un directorio");
-                crearDirectorio("/ADAT/Practicas", "DirectorioPrueba");
-            }
-            else
-                if(opcion ==2)
-                {
-                    System.out.println("Listar un directorio");
-                    listarDirectorio("/ADAT/Practicas/DirectorioPrueba");
-                }
-                else 
-                    if(opcion==3)
-                    {
-                        System.out.println("Copiar un archivo");
-                        copiarArchivo("/Users/Hugo/Documents/S.docx","/ADAT/Practicas/");
-                    }
-                    else
-                        if(opcion==4)
-                        {
-                            System.out.println("Mover un archivo");
-                            moverArchivo("/Users/Hugo/Documents/S.docx","/ADAT/Practicas/DirectorioPrueba");
-                        }
-                        else 
-                            if(opcion==5)
-                            {
-                                System.out.println("Eliminar un archivo/directorio");
-                                eliminarArchivoDirectorio("/ADAT/Practicas/DirectorioPrueba/S.docx");
-                            }
-                            else 
-                                if(opcion==6)
-                                {
-                                    System.out.println("Saliendo del programa");
-                                }
-        }
-    }
->>>>>>> 0e6bfdf1921c03590fcc8fb6a4ed0135fced80e5
 
 	public static void copiarArchivo(String origen,String destino) {
 		Path pathOrigen = Paths.get(origen);
